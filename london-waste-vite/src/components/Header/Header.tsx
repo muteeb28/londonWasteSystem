@@ -1,8 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+interface CartItem {
+  id: string;
+  service: string;
+  location?: string;
+}
+
+interface CartContextType {
+  items: CartItem[];
+  addToCart: (item: CartItem) => void;
+  removeFromCart: (id: string) => void;
+  clearCart: () => void;
+}
+
+const CartContext = createContext<CartContextType>({
+  items: [],
+  addToCart: () => {},
+  removeFromCart: () => {},
+  clearCart: () => {}
+});
+
+export const useCart = () => useContext(CartContext);
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
 
   const scrollToSection = (sectionId: string) => {
@@ -23,9 +47,29 @@ const Header: React.FC = () => {
     window.location.href = 'tel:02081234567';
   };
 
+  const addToCart = (item: CartItem) => {
+    setCartItems(prev => [...prev, item]);
+  };
+
+  const removeFromCart = (id: string) => {
+    setCartItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+  const cartContextValue = {
+    items: cartItems,
+    addToCart,
+    removeFromCart,
+    clearCart
+  };
+
   return (
-    <header className="bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <CartContext.Provider value={cartContextValue}>
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
             <div className="flex items-center space-x-3">
@@ -53,12 +97,20 @@ const Header: React.FC = () => {
               </button>
               <div className="absolute left-0 mt-2 w-64 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-200">
                 <div className="py-2">
-                  <button onClick={() => scrollToSection('services')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">House Clearance</button>
-                  <button onClick={() => scrollToSection('services')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Garden Clearance</button>
-                  <button onClick={() => scrollToSection('services')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Office Clearance</button>
-                  <button onClick={() => scrollToSection('services')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Construction Waste</button>
-                  <button onClick={() => scrollToSection('services')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Rubbish Removal</button>
-                  <button onClick={() => scrollToSection('services')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Commercial Waste</button>
+                  <button onClick={() => navigate('/services')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">All Services</button>
+                  <hr className="my-1 border-gray-200" />
+                  <button onClick={() => navigate('/sofa-chair-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Sofa & Chair Removal</button>
+                  <button onClick={() => navigate('/fridge-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Fridge Removal</button>
+                  <button onClick={() => navigate('/garden-waste-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Garden Waste Removal</button>
+                  <button onClick={() => navigate('/mattress-bed-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Mattress & Bed Removal</button>
+                  <button onClick={() => navigate('/table-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Table Removal</button>
+                  <button onClick={() => navigate('/old-batteries-disposal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Old Batteries Disposal</button>
+                  <button onClick={() => navigate('/appliance-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Appliance Removal</button>
+                  <button onClick={() => navigate('/electronic-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Electronic Removal</button>
+                  <button onClick={() => navigate('/furniture-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Furniture Removal</button>
+                  <button onClick={() => navigate('/hazardous-waste-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Hazardous Waste Removal</button>
+                  <button onClick={() => navigate('/general-waste-load-sizes')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">General Waste & Load Sizes</button>
+                  <button onClick={() => navigate('/builders-construction-waste-removal')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600">Builders / Construction Waste Removal</button>
                   <hr className="my-1 border-gray-200" />
                   <button onClick={() => navigate('/moving-services')} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">Moving Services</button>
                 </div>
@@ -76,18 +128,90 @@ const Header: React.FC = () => {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            <button 
-              onClick={handlePhoneClick}
-              className="text-lg font-bold text-green-600 hover:text-green-700 transition-colors cursor-pointer flex items-center"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              020 8123 4567
-            </button>
+            <div className="flex items-center space-x-3">
+              {/* Call Button */}
+              <button 
+                onClick={handlePhoneClick}
+                className="bg-green-600 hover:bg-green-700 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-md hover:shadow-lg"
+                title="Call us: 020 8123 4567"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+              </button>
+              
+              {/* Cart Button */}
+              <div className="relative">
+                <button 
+                  onClick={() => setIsCartOpen(!isCartOpen)}
+                  className="bg-green-600 hover:bg-green-700 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-md hover:shadow-lg"
+                  title="Shopping Cart"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m4.5 0a2 2 0 100 4 2 2 0 000-4zm-7 0a2 2 0 100 4 2 2 0 000-4z" />
+                  </svg>
+                  {cartItems.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                      {cartItems.length}
+                    </span>
+                  )}
+                </button>
+                
+                {/* Cart Dropdown */}
+                {isCartOpen && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold mb-3">Selected Services</h3>
+                      {cartItems.length === 0 ? (
+                        <p className="text-gray-500 text-center py-4">No services selected</p>
+                      ) : (
+                        <>
+                          <div className="space-y-2 max-h-60 overflow-y-auto">
+                            {cartItems.map((item, index) => (
+                              <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                <div>
+                                  <p className="font-medium text-sm">{item.service}</p>
+                                  {item.location && <p className="text-xs text-gray-500">{item.location}</p>}
+                                </div>
+                                <button
+                                  onClick={() => removeFromCart(item.id)}
+                                  className="text-red-500 hover:text-red-700"
+                                >
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                  </svg>
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="mt-4 pt-3 border-t border-gray-200">
+                            <button
+                              onClick={() => {
+                                navigate('/quote');
+                                setIsCartOpen(false);
+                              }}
+                              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors font-medium"
+                            >
+                              Get Quote for Selected Services
+                            </button>
+                            <button
+                              onClick={clearCart}
+                              className="w-full mt-2 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors text-sm"
+                            >
+                              Clear All
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
             <button 
               onClick={handleGetQuote}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md hover:shadow-lg"
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md hover:shadow-lg ml-4"
             >
               Get Quote
             </button>
@@ -107,21 +231,45 @@ const Header: React.FC = () => {
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="space-y-2">
               <button onClick={() => navigate('/')} className="block w-full text-left px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium rounded-lg">Home</button>
-              <button onClick={() => scrollToSection('services')} className="block w-full text-left px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium rounded-lg">Services</button>
+              <button onClick={() => navigate('/services')} className="block w-full text-left px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium rounded-lg">Services</button>
               <button onClick={() => navigate('/moving-services')} className="block w-full text-left px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium rounded-lg">Moving Services</button>
               <button onClick={() => scrollToSection('about')} className="block w-full text-left px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium rounded-lg">About</button>
               <button onClick={() => navigate('/contact')} className="block w-full text-left px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium rounded-lg">Contact</button>
               <button onClick={() => navigate('/blog')} className="block w-full text-left px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium rounded-lg">Blog</button>
               <div className="pt-4 border-t border-gray-200 space-y-2">
-                <button 
-                  onClick={handlePhoneClick}
-                  className="text-lg font-bold text-green-600 hover:text-green-700 transition-colors flex items-center px-4"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  020 8123 4567
-                </button>
+                <div className="flex items-center space-x-3 px-4 mb-4">
+                  {/* Mobile Call Button */}
+                  <button 
+                    onClick={handlePhoneClick}
+                    className="bg-green-600 hover:bg-green-700 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-md"
+                    title="Call us: 020 8123 4567"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                  </button>
+                  
+                  {/* Mobile Cart Button */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setIsCartOpen(!isCartOpen)}
+                      className="bg-green-600 hover:bg-green-700 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-md"
+                      title="Shopping Cart"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m4.5 0a2 2 0 100 4 2 2 0 000-4zm-7 0a2 2 0 100 4 2 2 0 000-4z" />
+                      </svg>
+                      {cartItems.length > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                          {cartItems.length}
+                        </span>
+                      )}
+                    </button>
+                  </div>
+                  
+                  <span className="text-lg font-bold text-green-600">020 8123 4567</span>
+                </div>
+                
                 <button 
                   onClick={handleGetQuote}
                   className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md"
@@ -132,8 +280,9 @@ const Header: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
-    </header>
+        </div>
+      </header>
+    </CartContext.Provider>
   );
 };
 
