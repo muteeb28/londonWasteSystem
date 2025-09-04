@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Home from './pages/Home/Home';
 import Services from './pages/Services/Services';
+import ProductDetail from './pages/ProductDetail/ProductDetail';
+import Cart from './pages/Cart/Cart';
+import Checkout from './pages/Checkout/Checkout';
 import SofaChairRemoval from './pages/SofaChairRemoval/SofaChairRemoval';
 import FridgeRemoval from './pages/FridgeRemoval/FridgeRemoval';
 import GardenWasteRemoval from './pages/GardenWasteRemoval/GardenWasteRemoval';
@@ -21,41 +24,47 @@ import BlogPost from './pages/Blog/BlogPost/BlogPost';
 import ContactUs from './pages/ContactUs/ContactUs';
 import MovingServices from './pages/MovingServices/MovingServices';
 import Chatbot from './components/Chatbot/Chatbot';
+import { CartProvider } from './context/CartContext';
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={
-            <>
-              <Header />
-              <Home />
-            </>
-          } />
-          <Route path="/services" element={<Services />} />
-          <Route path="/sofa-chair-removal" element={<SofaChairRemoval />} />
-          <Route path="/fridge-removal" element={<FridgeRemoval />} />
-          <Route path="/garden-waste-removal" element={<GardenWasteRemoval />} />
-          <Route path="/mattress-bed-removal" element={<MattressBedRemoval />} />
-          <Route path="/table-removal" element={<TableRemoval />} />
-          <Route path="/old-batteries-disposal" element={<OldBatteriesDisposal />} />
-          <Route path="/appliance-removal" element={<ApplianceRemoval />} />
-          <Route path="/electronic-removal" element={<ElectronicRemoval />} />
-          <Route path="/furniture-removal" element={<FurnitureRemoval />} />
-          <Route path="/hazardous-waste-removal" element={<HazardousWasteRemoval />} />
-          <Route path="/general-waste-load-sizes" element={<GeneralWasteLoadSizes />} />
-          <Route path="/builders-construction-waste-removal" element={<BuildersConstructionWasteRemoval />} />
-          <Route path="/quote" element={<QuoteForm />} />
-          <Route path="/blog" element={<BlogList />} />
-          <Route path="/blog/:id" element={<BlogPost />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/moving-services" element={<MovingServices />} />
-        </Routes>
-        <Chatbot />
-      </div>
-    </Router>
+    <CartProvider>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={
+              <>
+                <Header />
+                <Home />
+              </>
+            } />
+            <Route path="/services" element={<Services />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/sofa-chair-removal" element={<SofaChairRemoval />} />
+            <Route path="/fridge-removal" element={<FridgeRemoval />} />
+            <Route path="/garden-waste-removal" element={<GardenWasteRemoval />} />
+            <Route path="/mattress-bed-removal" element={<MattressBedRemoval />} />
+            <Route path="/table-removal" element={<TableRemoval />} />
+            <Route path="/old-batteries-disposal" element={<OldBatteriesDisposal />} />
+            <Route path="/appliance-removal" element={<ApplianceRemoval />} />
+            <Route path="/electronic-removal" element={<ElectronicRemoval />} />
+            <Route path="/furniture-removal" element={<FurnitureRemoval />} />
+            <Route path="/hazardous-waste-removal" element={<HazardousWasteRemoval />} />
+            <Route path="/general-waste-load-sizes" element={<GeneralWasteLoadSizes />} />
+            <Route path="/builders-construction-waste-removal" element={<BuildersConstructionWasteRemoval />} />
+            <Route path="/quote" element={<QuoteForm />} />
+            <Route path="/blog" element={<BlogList />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/moving-services" element={<MovingServices />} />
+          </Routes>
+          <Chatbot />
+        </div>
+      </Router>
+    </CartProvider>
   );
 }
 

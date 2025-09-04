@@ -334,7 +334,7 @@ const OldBatteriesDisposal: React.FC = () => {
                           {service.price}
                         </div>
                         <button
-                          onClick={() => navigate('/quote')}
+                          onClick={() => navigate(`/product/${service.id}`)}
                           className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-5 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-2"
                         >
                           <span>View Product</span>

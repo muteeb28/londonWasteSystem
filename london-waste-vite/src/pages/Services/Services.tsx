@@ -97,7 +97,7 @@ const Services: React.FC = () => {
       name: '2 Seater Sofa',
       category: 'Sofa & Chair Removal',
       price: '£45.00',
-      image: '/api/placeholder/300/200',
+      image: 'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Professional 2 seater sofa removal service',
       details: [
         'Safe removal from any floor',
@@ -111,7 +111,7 @@ const Services: React.FC = () => {
       name: '3 Seater Sofa',
       category: 'Sofa & Chair Removal',
       price: '£55.00',
-      image: '/api/placeholder/300/200',
+      image: 'https://images.pexels.com/photos/2062426/pexels-photo-2062426.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Professional 3 seater sofa removal service',
       details: [
         'Safe removal from any floor',
@@ -125,7 +125,7 @@ const Services: React.FC = () => {
       name: 'Armchair',
       category: 'Sofa & Chair Removal',
       price: '£35.00',
-      image: '/api/placeholder/300/200',
+      image: 'https://images.pexels.com/photos/586769/pexels-photo-586769.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Single armchair removal service',
       details: [
         'Quick and efficient removal',
@@ -452,7 +452,30 @@ const Services: React.FC = () => {
                   {categories.map((category) => (
                     <button
                       key={category.id}
-                      onClick={() => setSelectedCategory(category.id)}
+                      onClick={() => {
+                        if (category.id === 'all') {
+                          setSelectedCategory('all');
+                        } else if (category.id === 'Appliance Removal') {
+                          navigate('/appliance-removal');
+                        } else if (category.id === 'Electronic Removal') {
+                          navigate('/electronic-removal');
+                        } else if (category.id === 'Fridge Removal') {
+                          navigate('/fridge-removal');
+                        } else if (category.id === 'Garden Waste Removal') {
+                          navigate('/garden-waste-removal');
+                        } else if (category.id === 'Mattress & Bed Removal') {
+                          navigate('/mattress-bed-removal');
+                        } else if (category.id === 'Old Batteries Disposal') {
+                          navigate('/old-batteries-disposal');
+                        } else if (category.id === 'Sofa & Chair Removal') {
+                          navigate('/sofa-chair-removal');
+                        } else if (category.id === 'Table Removal') {
+                          navigate('/table-removal');
+                        } else {
+                          // For categories without dedicated pages, filter on current page
+                          setSelectedCategory(category.id);
+                        }
+                      }}
                       className={`w-full flex items-center p-3 rounded-lg text-left transition-colors ${
                         selectedCategory === category.id
                           ? 'bg-primary text-white'
@@ -582,7 +605,7 @@ const Services: React.FC = () => {
                           {service.price}
                         </div>
                         <button
-                          onClick={() => navigate('/quote')}
+                          onClick={() => navigate(`/product/${service.id}`)}
                           className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-5 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-2"
                         >
                           <span>View Product</span>

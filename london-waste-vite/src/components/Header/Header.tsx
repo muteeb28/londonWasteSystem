@@ -1,32 +1,11 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-interface CartItem {
-  id: string;
-  service: string;
-  location?: string;
-}
-
-interface CartContextType {
-  items: CartItem[];
-  addToCart: (item: CartItem) => void;
-  removeFromCart: (id: string) => void;
-  clearCart: () => void;
-}
-
-const CartContext = createContext<CartContextType>({
-  items: [],
-  addToCart: () => {},
-  removeFromCart: () => {},
-  clearCart: () => {}
-});
-
-export const useCart = () => useContext(CartContext);
+import { useCart } from '../../context/CartContext';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const { state } = useCart();
   const navigate = useNavigate();
 
   const scrollToSection = (sectionId: string) => {
@@ -47,28 +26,13 @@ const Header: React.FC = () => {
     window.location.href = 'tel:02081234567';
   };
 
-  const addToCart = (item: CartItem) => {
-    setCartItems(prev => [...prev, item]);
-  };
-
-  const removeFromCart = (id: string) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-  };
-
-  const cartContextValue = {
-    items: cartItems,
-    addToCart,
-    removeFromCart,
-    clearCart
+  const handleCartClick = () => {
+    navigate('/cart');
+    setIsCartOpen(false);
   };
 
   return (
-    <CartContext.Provider value={cartContextValue}>
-      <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
@@ -143,69 +107,19 @@ const Header: React.FC = () => {
               {/* Cart Button */}
               <div className="relative">
                 <button 
-                  onClick={() => setIsCartOpen(!isCartOpen)}
+                  onClick={handleCartClick}
                   className="bg-green-600 hover:bg-green-700 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-md hover:shadow-lg"
                   title="Shopping Cart"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m4.5 0a2 2 0 100 4 2 2 0 000-4zm-7 0a2 2 0 100 4 2 2 0 000-4z" />
                   </svg>
-                  {cartItems.length > 0 && (
+                  {state.totalItems > 0 && (
                     <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                      {cartItems.length}
+                      {state.totalItems}
                     </span>
                   )}
                 </button>
-                
-                {/* Cart Dropdown */}
-                {isCartOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg border border-gray-200 z-50">
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold mb-3">Selected Services</h3>
-                      {cartItems.length === 0 ? (
-                        <p className="text-gray-500 text-center py-4">No services selected</p>
-                      ) : (
-                        <>
-                          <div className="space-y-2 max-h-60 overflow-y-auto">
-                            {cartItems.map((item, index) => (
-                              <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                                <div>
-                                  <p className="font-medium text-sm">{item.service}</p>
-                                  {item.location && <p className="text-xs text-gray-500">{item.location}</p>}
-                                </div>
-                                <button
-                                  onClick={() => removeFromCart(item.id)}
-                                  className="text-red-500 hover:text-red-700"
-                                >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                  </svg>
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="mt-4 pt-3 border-t border-gray-200">
-                            <button
-                              onClick={() => {
-                                navigate('/quote');
-                                setIsCartOpen(false);
-                              }}
-                              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors font-medium"
-                            >
-                              Get Quote for Selected Services
-                            </button>
-                            <button
-                              onClick={clearCart}
-                              className="w-full mt-2 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors text-sm"
-                            >
-                              Clear All
-                            </button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
             
@@ -252,16 +166,16 @@ const Header: React.FC = () => {
                   {/* Mobile Cart Button */}
                   <div className="relative">
                     <button 
-                      onClick={() => setIsCartOpen(!isCartOpen)}
+                      onClick={handleCartClick}
                       className="bg-green-600 hover:bg-green-700 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-md"
                       title="Shopping Cart"
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5m4.5 0a2 2 0 100 4 2 2 0 000-4zm-7 0a2 2 0 100 4 2 2 0 000-4z" />
                       </svg>
-                      {cartItems.length > 0 && (
+                      {state.totalItems > 0 && (
                         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                          {cartItems.length}
+                          {state.totalItems}
                         </span>
                       )}
                     </button>
@@ -282,7 +196,6 @@ const Header: React.FC = () => {
         )}
         </div>
       </header>
-    </CartContext.Provider>
   );
 };
 

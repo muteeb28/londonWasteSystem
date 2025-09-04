@@ -20,24 +20,24 @@ const SofaChairRemoval: React.FC = () => {
     {
       id: 'two-seater-sofa',
       name: '2 Seater Sofa',
-      price: '£60.00',
-      image: '/api/placeholder/300/200',
+      price: '£45.00',
+      image: 'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Professional 2 seater sofa removal service',
       details: ['Safe removal from any floor', 'Eco-friendly disposal', 'No hidden charges', 'Same day service available']
     },
     {
       id: 'three-seater-sofa',
       name: '3 Seater Sofa',
-      price: '£70.00',
-      image: '/api/placeholder/300/200',
+      price: '£55.00',
+      image: 'https://images.pexels.com/photos/2062426/pexels-photo-2062426.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Professional 3 seater sofa removal service',
       details: ['Safe removal from any floor', 'Eco-friendly disposal', 'No hidden charges', 'Same day service available']
     },
     {
       id: 'armchair',
       name: 'Armchair',
-      price: '£50.00',
-      image: '/api/placeholder/300/200',
+      price: '£35.00',
+      image: 'https://images.pexels.com/photos/586769/pexels-photo-586769.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Single armchair removal service',
       details: ['Quick and efficient removal', 'Suitable for all types of chairs', 'Recycling when possible', 'Professional service']
     },
@@ -45,7 +45,7 @@ const SofaChairRemoval: React.FC = () => {
       id: 'corner-sofa',
       name: 'Corner Sofa',
       price: '£95.00',
-      image: '/api/placeholder/300/200',
+      image: 'https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Maximum 5 seats - Book a "Large Corner Sofa" if you have more than 5 seats',
       details: ['Up to 5 seats', 'Heavy lifting included', 'Dismantling if required', 'Professional handling']
     },
@@ -393,7 +393,7 @@ const SofaChairRemoval: React.FC = () => {
                           {service.price}
                         </div>
                         <button
-                          onClick={() => navigate('/quote')}
+                          onClick={() => navigate(`/product/${service.id}`)}
                           className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-5 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-2"
                         >
                           <span>View Product</span>

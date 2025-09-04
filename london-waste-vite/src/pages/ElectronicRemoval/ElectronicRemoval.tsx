@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 const ElectronicRemoval: React.FC = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
@@ -379,7 +382,10 @@ const ElectronicRemoval: React.FC = () => {
                     )}
                     <div className="flex justify-between items-center">
                       <span className="text-2xl font-bold text-indigo-600">{service.price}</span>
-                      <button className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">
+                      <button 
+                        onClick={() => navigate(`/product/electronic-${service.id}`)}
+                        className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+                      >
                         View Product
                       </button>
                     </div>
@@ -471,41 +477,7 @@ const ElectronicRemoval: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">London Waste Management</h3>
-              <p className="text-gray-400">Professional electronic waste removal services across London.</p>
-            </div>
-            <div>
-              <h4 className="text-md font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="/" className="hover:text-white">Home</a></li>
-                <li><a href="/services" className="hover:text-white">Services</a></li>
-                <li><a href="/contact" className="hover:text-white">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-md font-semibold mb-4">Services</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="/electronic-removal" className="hover:text-white">Electronic Removal</a></li>
-                <li><a href="/appliance-removal" className="hover:text-white">Appliance Removal</a></li>
-                <li><a href="/fridge-removal" className="hover:text-white">Fridge Removal</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-md font-semibold mb-4">Contact Info</h4>
-              <p className="text-gray-400 mb-2">📞 020 8123 4567</p>
-              <p className="text-gray-400">📧 info@londonwastemanagement.co.uk</p>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 London Waste Management. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
